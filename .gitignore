@@ -1,0 +1,36 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local data and generated artifacts
+uploads/
+*.sqlite3
+*.db
+
+# ML caches and model files
+.cache/
+.huggingface/
+*.safetensors
+*.bin
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
