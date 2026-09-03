@@ -25,6 +25,8 @@ The backend automatically indexes PDF files stored in `frontend/`:
 - `Gazette-Notification.pdf`
 - `BIS-CA-6th-Amendment-Regulations-2021-Gazette.pdf`
 - `BIS-CA-4th-Amendment-Regulations-2021-Gazette.pdf`
+- `BIS_ROD_Order_12092019.pdf`
+- `BIS-Rules-2018_amendments_Sep_15102020.pdf`
 
 To add another document, copy a readable PDF into `frontend/` and add its filename to `PDF_PATHS` in `backend/app/services/retrieval/local_knowledge.py`.
 

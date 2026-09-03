@@ -71,6 +71,8 @@ PDF_PATHS = (
     PDF_DIRECTORY / "Gazette-Notification.pdf",
     PDF_DIRECTORY / "BIS-CA-6th-Amendment-Regulations-2021-Gazette.pdf",
     PDF_DIRECTORY / "BIS-CA-4th-Amendment-Regulations-2021-Gazette.pdf",
+    PDF_DIRECTORY / "BIS_ROD_Order_12092019.pdf",
+    PDF_DIRECTORY / "BIS-Rules-2018_amendments_Sep_15102020.pdf",
 )
 
 
@@ -88,17 +90,41 @@ def _load_pdf_chunks() -> List[dict]:
             is_amendment = "amendment" in filename
             amendment_number = "4th" if "4th" in filename else "6th"
             is_gazette = filename.startswith("gazette")
+            is_rod_order = filename == "bis_rod_order_12092019.pdf"
+            is_rules_2018 = filename == "bis-rules-2018_amendments_sep_15102020.pdf"
             document_id = (
-                f"bis-ca-{amendment_number}-amendment-regulations-2021"
+                "bis-rules-2018-amendments-september-2020"
+                if is_rules_2018
+                else f"bis-ca-{amendment_number}-amendment-regulations-2021"
                 if is_amendment
-                else "bis-gazette-notification" if is_gazette else "bis-rag-knowledge-dataset"
+                else "bis-gazette-notification"
+                if is_gazette
+                else "bis-rod-order-12092019"
+                if is_rod_order
+                else "bis-rag-knowledge-dataset"
             )
             document_title = (
-                f"BIS {amendment_number} Amendment Regulations Gazette"
+                "BIS Rules 2018 Amendments September 2020"
+                if is_rules_2018
+                else f"BIS {amendment_number} Amendment Regulations Gazette"
                 if is_amendment
-                else "BIS Gazette Notification" if is_gazette else "BIS RAG Knowledge Dataset"
+                else "BIS Gazette Notification"
+                if is_gazette
+                else "BIS ROD Order 12 September 2019"
+                if is_rod_order
+                else "BIS RAG Knowledge Dataset"
             )
-            source_type = "GAZETTE AMENDMENT" if is_amendment else "GAZETTE" if is_gazette else "BIS DATASET"
+            source_type = (
+                "BIS RULES 2018"
+                if is_rules_2018
+                else "GAZETTE AMENDMENT"
+                if is_amendment
+                else "GAZETTE"
+                if is_gazette
+                else "BIS ROD ORDER"
+                if is_rod_order
+                else "BIS DATASET"
+            )
             for page_number, page in enumerate(document, start=1):
                 text = re.sub(r"\s+", " ", page.get_text()).strip()
                 if not text:
