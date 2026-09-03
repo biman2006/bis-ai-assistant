@@ -140,20 +140,7 @@ A healthy local response includes:
 }
 ```
 
-### Chat
 
-```powershell
-$body = @{
-  query = "I want to make an electric bulb. How can I get BIS approval?"
-  language = "en"
-} | ConvertTo-Json
-
-Invoke-RestMethod `
-  -Uri http://127.0.0.1:8000/api/chat `
-  -Method Post `
-  -ContentType "application/json" `
-  -Body $body
-```
 
 ### Search
 
@@ -187,59 +174,3 @@ scripts/                     Utility scripts
 frontend/*.pdf               Indexed BIS knowledge documents
 ```
 
-## Answer Quality
-
-Confidence is evidence-based. It considers query-term coverage, exact phrase matches, retrieved passage scores, source agreement, and verified evidence metadata. A high percentage should mean that the indexed documents clearly support the answer, not simply that the model sounds certain.
-
-For the best answers:
-
-- Ask specific questions and include the product, IS number, regulation, or date.
-- Keep official PDFs current and readable.
-- Verify date-sensitive requirements against the latest BIS notification.
-- Ensure the configured LLM key has available credits.
-
-## Troubleshooting
-
-### `ModuleNotFoundError: No module named 'app'`
-
-Start from the repository root with:
-
-```powershell
-python -m uvicorn app.main:app --reload --app-dir backend
-```
-
-Or change into `backend` before running Uvicorn.
-
-### `429 insufficient_quota`
-
-The API key is valid but the OpenAI account has no available credits. Add credits or use another configured OpenAI-compatible provider. The local fallback will continue to answer from the PDFs.
-
-### PDF answers are not updated
-
-Restart the backend. PDF files are read and chunked when the backend process starts.
-
-### Frontend shows backend unavailable
-
-Confirm that the backend is running on port 8000. Set `VITE_API_URL` if the backend uses another address, for example:
-
-```env
-VITE_API_URL=http://localhost:8001/api
-```
-
-## Validation
-
-```powershell
-cd frontend
-npm run lint
-npm run build
-
-cd ..\backend
-..\.venv\Scripts\python.exe -m compileall -q app
-```
-
-## Security Notes
-
-- Never commit `backend/.env` or expose the API key in frontend code.
-- Rotate a key immediately if it is accidentally exposed.
-- Treat chatbot answers as guidance, not legally binding compliance advice.
-- Verify current BIS requirements using official sources before manufacturing, selling, importing, or certifying a product.
